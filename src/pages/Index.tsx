@@ -85,7 +85,7 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-[#F8F9F9] flex flex-col font-sans">
       {/* Header */}
-      <header className="flex justify-center pt-8 pb-4 animate-fade-in-up">
+      <header className="flex justify-start px-8 pt-8 pb-4 animate-fade-in-up">
         <img src={logo} alt={agencyName} className="h-16 w-auto" />
       </header>
 
