@@ -67,6 +67,18 @@ const Index = () => {
     return `${API_BASE_URL}${url.startsWith("/") ? "" : "/"}${url}`;
   };
 
+  const cleanOperatorNotes = (notes?: string) => {
+    if (!notes) return undefined;
+    // Remove lines that look like feedback evaluations: "[DD/MM/YYYY] Évaluation: X/5..."
+    return notes
+      .split('\n')
+      .filter(line => !line.trim().match(/^\[\d{2}\/\d{2}\/\d{4}\]\s*Évaluation:/i))
+      .join('\n')
+      .trim();
+  };
+
+  const cleanedNotes = cleanOperatorNotes(agent.operator_notes);
+
   const d = {
     name: `${agent.first_name || ""} ${agent.last_name || ""}`.trim().toUpperCase() || "CANDIDAT",
     nationality: agent.nationality || "Marocaine",
@@ -75,7 +87,7 @@ const Index = () => {
     location: `${agent.neighborhood || ""}${agent.neighborhood && agent.city ? ", " : ""}${agent.city || ""}` || "Casablanca",
     phone: agent.phone || "",
     photo: getMediaUrl(agent.photo) || undefined,
-    about: agent.operator_notes || `Profil ${agent.poste_display || "intervenant"} avec ${agent.experience_years || 0} ans d'expérience.`,
+    about: cleanedNotes || `Profil ${agent.poste_display || "intervenant"} avec ${agent.experience_years || 0} ans d'expérience.`,
     documents: [
       { title: "CIN Image", url: getMediaUrl(agent.cin_file) || undefined },
       { title: "Fiche antropométrique", url: getMediaUrl(agent.fiche_antropometrique) || undefined },
