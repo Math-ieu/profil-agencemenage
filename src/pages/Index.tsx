@@ -70,41 +70,26 @@ const Index = () => {
   const d = {
     name: `${agent.first_name || ""} ${agent.last_name || ""}`.trim().toUpperCase() || "CANDIDAT",
     nationality: agent.nationality || "Marocaine",
-    maritalStatus: agent.marital_status || "Non spécifié",
+    maritalStatus: agent.marital_status || "Mariée",
     age: getAge(agent.birth_date),
     location: `${agent.neighborhood || ""}${agent.neighborhood && agent.city ? ", " : ""}${agent.city || ""}` || "Casablanca",
     phone: agent.phone || "",
     photo: getMediaUrl(agent.photo) || undefined,
     about: agent.operator_notes || `Profil ${agent.poste_display || "intervenant"} avec ${agent.experience_years || 0} ans d'expérience.`,
-    languages: Array.isArray(agent.languages) ? agent.languages : ["Arabe"],
-    experience_list: ["Professionnel", agent.poste_display].filter(Boolean),
     documents: [
-      { title: "CIN", url: getMediaUrl(agent.cin_file) || undefined },
-      { title: "Fiche Anthropométrique", url: getMediaUrl(agent.fiche_antropometrique) || undefined },
-      { title: "Attestation", url: getMediaUrl(agent.attestation_file) || undefined },
+      { title: "CIN Image", url: getMediaUrl(agent.cin_file) || undefined },
+      { title: "Fiche antropométrique", url: getMediaUrl(agent.fiche_antropometrique) || undefined },
     ],
   };
 
   return (
-    <div className="min-h-screen bg-background flex flex-col">
-      {/* Header */}
-      <header className="px-6 py-4 animate-fade-in-up">
-        <img src={logo} alt={agencyName} className="h-20 w-auto" />
-      </header>
-
+    <div className="min-h-screen bg-[#F8F9F9] flex flex-col font-sans">
       {/* Main */}
-      <main className="flex-1 flex flex-col items-center px-4 pb-12">
+      <main className="flex-1 flex flex-col items-center px-4 pb-12 pt-8">
         {/* Badge titre */}
-        <div className="animate-fade-in-up animate-delay-1 mt-4 mb-4">
-          <SectionBadge label="Fiche Candidat" />
+        <div className="animate-fade-in-up animate-delay-1 mb-8">
+          <SectionBadge label="FICHE CANDIDAT" />
         </div>
-
-        {agent.demande_context && (
-          <div className="animate-fade-in-up animate-delay-1 mb-8 text-center">
-            <h2 className="text-xl font-bold text-primary">{agent.demande_context.service}</h2>
-            <p className="text-sm text-muted-foreground">Proposition pour {agent.demande_context.client_name}</p>
-          </div>
-        )}
 
         {/* Profil */}
         <div className="animate-fade-in-up animate-delay-2 mb-10">
@@ -120,41 +105,17 @@ const Index = () => {
         </div>
 
         {/* A propos */}
-        <section className="w-full max-w-md animate-fade-in-up animate-delay-3 mb-10">
-          <SectionBadge label="A propos" />
-          <p className="text-center text-muted-foreground text-sm leading-relaxed px-2 mb-4 whitespace-pre-line">
+        <section className="w-full max-w-md animate-fade-in-up animate-delay-3 mb-10 flex flex-col items-center">
+          <SectionBadge label="A PROPOS" />
+          <p className="text-center text-[#64748b] text-base leading-relaxed px-6 whitespace-pre-line">
             {d.about}
           </p>
-
-          <div className="flex flex-col gap-3 px-2">
-            <div>
-              <p className="text-base font-bold text-primary mb-2 text-center">Langues</p>
-              <div className="flex flex-wrap justify-center gap-2">
-                {d.languages.map((lang: string) => (
-                  <span key={lang} className="inline-flex items-center rounded-full bg-primary/10 text-primary px-4 py-1.5 text-sm font-medium">
-                    {lang}
-                  </span>
-                ))}
-              </div>
-            </div>
-
-            <div>
-              <p className="text-base font-bold text-primary mb-2 text-center">Expérience</p>
-              <div className="flex flex-wrap justify-center gap-2">
-                {d.experience_list.map((exp: string) => (
-                  <span key={exp} className="inline-flex items-center rounded-full bg-primary/10 text-primary px-4 py-1.5 text-sm font-medium">
-                    {exp}
-                  </span>
-                ))}
-              </div>
-            </div>
-          </div>
         </section>
 
         {/* Documents */}
-        <section className="w-full max-w-md animate-fade-in-up animate-delay-4 mb-10">
-          <SectionBadge label="Documents" />
-          <div className="flex flex-col gap-3">
+        <section className="w-full max-w-md animate-fade-in-up animate-delay-4 mb-10 flex flex-col items-center">
+          <SectionBadge label="DOCUMENTS" />
+          <div className="flex flex-col gap-3 w-full px-4">
             {d.documents.map((doc) => (
               <DocumentCard 
                 key={doc.title} 
@@ -167,19 +128,19 @@ const Index = () => {
         </section>
 
         {/* CTA */}
-        <div className="animate-fade-in-up animate-delay-5 flex flex-col items-center gap-3">
-          <Button size="lg" className="rounded-full px-8 gap-2" asChild>
+        <div className="animate-fade-in-up animate-delay-5 flex flex-col items-center gap-2 mt-4">
+          <Button size="lg" className="rounded-full px-10 py-7 text-lg bg-[#008080] hover:bg-[#006666] gap-3 shadow-lg" asChild>
             <a href="tel:0664226790">
-              <MessageCircle className="h-4 w-4" />
+              <MessageCircle className="h-6 w-6" />
               Contacter : 06 64 22 67 90
             </a>
           </Button>
-          <p className="text-xs text-muted-foreground">Service commercial</p>
+          <p className="text-sm font-medium text-[#64748b]">Service commercial</p>
         </div>
       </main>
 
       {/* Footer */}
-      <footer className="text-center py-6 text-xs text-muted-foreground border-t border-border mt-auto">
+      <footer className="text-center py-6 text-xs text-[#94a3b8] border-t border-[#e2e8f0] mt-auto">
         © {new Date().getFullYear()} {agencyName} — Tous droits réservés
       </footer>
     </div>
