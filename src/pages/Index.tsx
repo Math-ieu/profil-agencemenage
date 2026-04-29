@@ -84,8 +84,13 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-[#F8F9F9] flex flex-col font-sans">
+      {/* Header */}
+      <header className="flex justify-center pt-8 pb-4 animate-fade-in-up">
+        <img src={logo} alt={agencyName} className="h-16 w-auto" />
+      </header>
+
       {/* Main */}
-      <main className="flex-1 flex flex-col items-center px-4 pb-12 pt-8">
+      <main className="flex-1 flex flex-col items-center px-4 pb-12">
         {/* Badge titre */}
         <div className="animate-fade-in-up animate-delay-1 mb-8">
           <SectionBadge label="FICHE CANDIDAT" />
