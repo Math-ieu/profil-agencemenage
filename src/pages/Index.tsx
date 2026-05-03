@@ -64,7 +64,12 @@ const Index = () => {
   const getMediaUrl = (url?: string) => {
     if (!url) return null;
     if (url.startsWith("http")) return url;
-    return `${API_BASE_URL}${url.startsWith("/") ? "" : "/"}${url}`;
+    
+    // Ensure we use the public /api/media/ proxy
+    const cleanUrl = url.replace(/^(\/)?media\//, "api/media/");
+    const finalPath = cleanUrl.startsWith("api/media/") ? cleanUrl : `api/media/${cleanUrl.startsWith("/") ? cleanUrl.slice(1) : cleanUrl}`;
+    
+    return `${API_BASE_URL}${finalPath.startsWith("/") ? "" : "/"}${finalPath}`;
   };
 
   const cleanOperatorNotes = (notes?: string) => {
@@ -86,7 +91,7 @@ const Index = () => {
     age: getAge(agent.birth_date),
     location: `${agent.neighborhood || ""}${agent.neighborhood && agent.city ? ", " : ""}${agent.city || ""}` || "Casablanca",
     phone: agent.phone || "",
-    photo: getMediaUrl(agent.photo) || undefined,
+    photo: getMediaUrl(agent.active_photo ? (agent as any)[agent.active_photo] : agent.photo) || getMediaUrl(agent.photo) || undefined,
     about: cleanedNotes || `Profil ${agent.poste_display || "intervenant"} avec ${agent.experience_years || 0} ans d'expérience.`,
     documents: [
       { title: "CIN Image", url: getMediaUrl(agent.cin_file) || undefined },
