@@ -65,11 +65,17 @@ const Index = () => {
     if (!url) return null;
     if (url.startsWith("http")) return url;
     
-    // Ensure we use the public /api/media/ proxy
-    const cleanUrl = url.replace(/^(\/)?media\//, "api/media/");
-    const finalPath = cleanUrl.startsWith("api/media/") ? cleanUrl : `api/media/${cleanUrl.startsWith("/") ? cleanUrl.slice(1) : cleanUrl}`;
+    // Normalize: remove leading slash
+    let path = url.startsWith("/") ? url.slice(1) : url;
     
-    return `${API_BASE_URL}${finalPath.startsWith("/") ? "" : "/"}${finalPath}`;
+    // Handle old media/ prefix or missing api/media/
+    if (path.startsWith("media/")) {
+      path = path.replace(/^media\//, "api/media/");
+    }
+    
+    const finalPath = path.startsWith("api/media/") ? path : `api/media/${path}`;
+    
+    return `${API_BASE_URL}/${finalPath}`;
   };
 
   const cleanOperatorNotes = (notes?: string) => {
@@ -92,7 +98,7 @@ const Index = () => {
     location: `${agent.neighborhood || ""}${agent.neighborhood && agent.city ? ", " : ""}${agent.city || ""}` || "Casablanca",
     phone: agent.phone || "",
     photo: getMediaUrl(agent.active_photo ? (agent as any)[agent.active_photo] : agent.photo) || getMediaUrl(agent.photo) || undefined,
-    about: cleanedNotes || `Profil ${agent.poste_display || "intervenant"} avec ${agent.experience_years || 0} ans d'expérience.`,
+    about: (cleanedNotes || `Profil ${agent.poste_display || "intervenant"} avec ${agent.experience_years || 0} ans d'expérience.`).replace(/ménageu/gi, "ménage"),
     documents: [
       { title: "CIN Image", url: getMediaUrl(agent.cin_file) || undefined },
       { title: "Fiche antropométrique", url: getMediaUrl(agent.fiche_antropometrique) || undefined },
